@@ -19,8 +19,8 @@ async def create_project(user: Projects):
 
 
 @router.get("/projects/", tags=["projects"], response_model=List[Projects])
-async def list_projects():
-    return ProjectsController.get(projects_repository)
+async def list_projects(creator_uid: str = None):
+    return ProjectsController.get(projects_repository, creator_uid=creator_uid)
 
 
 @router.get("/projects/{pid}", tags=["projects"], response_model=Projects)

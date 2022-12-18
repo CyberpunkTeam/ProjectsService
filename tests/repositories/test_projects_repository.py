@@ -17,6 +17,7 @@ def test_save_project():
         description="Platform for matching teams and projects",
         technologies=["python"],
         idioms=["English"],
+        creator_uid="1",
     )
 
     ok = repository.insert(project)
@@ -25,7 +26,7 @@ def test_save_project():
 
 
 @mongomock.patch(servers=(("server.example.com", 27017),))
-def test_get_user():
+def test_get_project_by_pid():
     url = config.DATABASE_URL
     db_name = config.DATABASE_NAME
     repository = ProjectsRepository(url, db_name)
@@ -36,6 +37,7 @@ def test_get_user():
         description="Platform for matching teams and projects",
         technologies=["python"],
         idioms=["English"],
+        creator_uid="1",
     )
 
     ok = repository.insert(project)
@@ -53,3 +55,27 @@ def test_get_user():
     assert project_found.description == "Platform for matching teams and projects"
     assert project_found.technologies == ["python"]
     assert project_found.idioms == ["English"]
+
+
+@mongomock.patch(servers=(("server.example.com", 27017),))
+def test_get_project_by_creator_uid():
+    url = config.DATABASE_URL
+    db_name = config.DATABASE_NAME
+    repository = ProjectsRepository(url, db_name)
+    pid = "1"
+    project = Projects(
+        name="Findmyteam",
+        pid=pid,
+        description="Platform for matching teams and projects",
+        technologies=["python"],
+        idioms=["English"],
+        creator_uid="1",
+    )
+
+    ok = repository.insert(project)
+
+    assert ok
+
+    project_found = repository.get(creator_uid="1")
+
+    assert len(project_found) == 1

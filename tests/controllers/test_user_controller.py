@@ -16,6 +16,7 @@ def test_get_all_projects():
             description="Platform for matching teams and projects",
             technologies=["python"],
             idioms=["English"],
+            creator_uid="1",
         ),
         Projects(
             name="Findmyteam2",
@@ -23,6 +24,7 @@ def test_get_all_projects():
             description="Platform for matching teams and projects",
             technologies=["python"],
             idioms=["English"],
+            creator_uid="1",
         ),
     ]
     result = ProjectsController.get(repository)
@@ -38,6 +40,7 @@ def test_get_project():
             description="Platform for matching teams and projects",
             technologies=["python"],
             idioms=["English"],
+            creator_uid="1",
         ),
         Projects(
             name="Findmyteam2",
@@ -45,6 +48,7 @@ def test_get_project():
             description="Platform for matching teams and projects",
             technologies=["python"],
             idioms=["English"],
+            creator_uid="1",
         ),
     ]
     result = ProjectsController.get(repository, "1")
@@ -67,6 +71,7 @@ def test_create_project():
         description="Platform for matching teams and projects",
         technologies=["python"],
         idioms=["English"],
+        creator_uid="1",
     )
     result = ProjectsController.post(repository, project)
     assert result == project
@@ -81,6 +86,7 @@ def test_error_create_user():
         description="Platform for matching teams and projects",
         technologies=["python"],
         idioms=["English"],
+        creator_uid="1",
     )
     with pytest.raises(HTTPException):
         ProjectsController.post(repository, project)
