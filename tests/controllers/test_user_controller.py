@@ -3,90 +3,84 @@ from unittest.mock import Mock
 import pytest
 from fastapi import HTTPException
 
-from app.controllers.user_controller import UserController
-from app.models.users import Users
+from app.controllers.projects_controller import ProjectsController
+from app.models.projects import Projects
 
 
-def test_get_all_user():
+def test_get_all_projects():
     repository = Mock()
     repository.get.return_value = [
-        Users(
-            name="Martin",
-            lastname="Lopez",
-            email="tincho_lopez@gmail.com",
-            location="CABA",
+        Projects(
+            name="Findmyteam",
+            pid="1",
+            description="Platform for matching teams and projects",
+            technologies=["python"],
+            idioms=["English"],
         ),
-        Users(
-            name="Juan", lastname="Gomez", email="juan_gomez@gmail.com", location="CABA"
+        Projects(
+            name="Findmyteam2",
+            pid="2",
+            description="Platform for matching teams and projects",
+            technologies=["python"],
+            idioms=["English"],
         ),
     ]
-    result = UserController.get(repository)
+    result = ProjectsController.get(repository)
     assert len(result) == 2
 
 
-def test_get_top_user():
+def test_get_project():
     repository = Mock()
     repository.get.return_value = [
-        Users(
-            name="Martin",
-            lastname="Lopez",
-            email="tincho_lopez@gmail.com",
-            location="CABA",
+        Projects(
+            name="Findmyteam",
+            pid="1",
+            description="Platform for matching teams and projects",
+            technologies=["python"],
+            idioms=["English"],
         ),
-        Users(
-            name="Juan", lastname="Gomez", email="juan_gomez@gmail.com", location="CABA"
+        Projects(
+            name="Findmyteam2",
+            pid="2",
+            description="Platform for matching teams and projects",
+            technologies=["python"],
+            idioms=["English"],
         ),
     ]
-    result = UserController.get(repository, top=True)
-    assert result.name == "Martin"
+    result = ProjectsController.get(repository, "1")
+    assert result.name == "Findmyteam"
 
 
-def test_get_user():
-    repository = Mock()
-    repository.get.return_value = [
-        Users(
-            name="Martin",
-            lastname="Lopez",
-            email="tincho_lopez@gmail.com",
-            location="CABA",
-        )
-    ]
-    result = UserController.get(repository, email="tincho_lopez@gmail.com", top=True)
-    assert result.name == "Martin"
-
-
-def test_error_user_not_found():
+def test_error_project_not_found():
     repository = Mock()
     repository.get.return_value = []
     with pytest.raises(HTTPException):
-        UserController.get(repository, email="tincho_lopez@gmail.com", top=True)
+        ProjectsController.get(repository, pid="1")
 
 
-def test_create_user():
+def test_create_project():
     repository = Mock()
     repository.insert.return_value = True
-    user = (
-        Users(
-            name="Martin",
-            lastname="Lopez",
-            email="tincho_lopez@gmail.com",
-            location="CABA",
-        ),
+    project = Projects(
+        name="Findmyteam",
+        pid="1",
+        description="Platform for matching teams and projects",
+        technologies=["python"],
+        idioms=["English"],
     )
-    result = UserController.post(repository, user)
-    assert result == user
+    result = ProjectsController.post(repository, project)
+    assert result == project
 
 
 def test_error_create_user():
     repository = Mock()
     repository.insert.return_value = False
-    user = (
-        Users(
-            name="Martin",
-            lastname="Lopez",
-            email="tincho_lopez@gmail.com",
-            location="CABA",
-        ),
+    project = Projects(
+        name="Findmyteam",
+        pid="1",
+        description="Platform for matching teams and projects",
+        technologies=["python"],
+        idioms=["English"],
     )
     with pytest.raises(HTTPException):
-        UserController.post(repository, user)
+        ProjectsController.post(repository, project)
