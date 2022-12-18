@@ -8,6 +8,7 @@ def test_create_project():
         description="Platform for matching teams and projects",
         technologies=["python"],
         idioms=["English"],
+        creator_uid="1",
     )
     assert project.name == "Findmyteam"
     assert project.pid == "1"

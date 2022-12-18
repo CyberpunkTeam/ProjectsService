@@ -11,6 +11,7 @@ class Projects(BaseModel):
     idioms: List[str]
     description: str
     technologies: List[str]
+    creator_uid: str
 
     def to_json(self):
         return loads(self.json(exclude_defaults=True))
@@ -23,6 +24,7 @@ class Projects(BaseModel):
             "idioms": list,
             "description": str,
             "technologies": list,
+            "creator_uid": str,
         }
 
     @staticmethod

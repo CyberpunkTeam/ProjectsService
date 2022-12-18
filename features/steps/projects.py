@@ -26,6 +26,7 @@ def step_impl(context, name, idioms, description, technologies):
         "idioms": idioms.split(","),
         "description": description,
         "technologies": technologies.split(","),
+        "creator_uid": "1",
     }
 
 

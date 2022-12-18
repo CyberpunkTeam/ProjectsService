@@ -14,10 +14,15 @@ class ProjectsRepository(DataBase):
         else:
             super().__init__(url, db_name)
 
-    def get(self, email=None):
-        if email is None:
+    def get(self, pid=None, creator_uid=None):
+        if pid is None and creator_uid is None:
             return self.filter(self.COLLECTION_NAME, {}, output_model=Projects)
-        return self.find_by(self.COLLECTION_NAME, "pid", email, output_model=Projects)
+        elif pid is not None:
+            return self.find_by(self.COLLECTION_NAME, "pid", pid, output_model=Projects)
+        else:
+            return self.find_by(
+                self.COLLECTION_NAME, "creator_uid", creator_uid, output_model=Projects
+            )
 
     def insert(self, project: Projects):
         return self.save(self.COLLECTION_NAME, project)
