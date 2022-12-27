@@ -30,3 +30,8 @@ class ProjectsRepository(DataBase):
     @staticmethod
     def create_repository(url, database_name):
         return ProjectsRepository(url, database_name)
+
+    def put(self, project_update):
+        return self.update(
+            self.COLLECTION_NAME, "pid", project_update.pid, project_update
+        )
