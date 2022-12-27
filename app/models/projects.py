@@ -41,3 +41,4 @@ class Projects(BaseModel):
         self.pid = Projects.get_pid()
         local = datetime.now()
         self.created_date = local.strftime("%d-%m-%Y:%H:%M:%S")
+        self.updated_date = local.strftime("%d-%m-%Y:%H:%M:%S")
