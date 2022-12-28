@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime
 from json import loads
 from typing import Optional, List
 
@@ -12,6 +13,8 @@ class Projects(BaseModel):
     description: str
     technologies: List[str]
     creator_uid: str
+    created_date: Optional[str] = ""
+    updated_date: Optional[str] = ""
 
     def to_json(self):
         return loads(self.json(exclude_defaults=True))
@@ -25,9 +28,17 @@ class Projects(BaseModel):
             "description": str,
             "technologies": list,
             "creator_uid": str,
+            "created_date": str,
+            "updated_date": str,
         }
 
     @staticmethod
     def get_pid():
         myuuid = uuid.uuid4()
         return str(myuuid)
+
+    def complete(self):
+        self.pid = Projects.get_pid()
+        local = datetime.now()
+        self.created_date = local.strftime("%d-%m-%Y:%H:%M:%S")
+        self.updated_date = local.strftime("%d-%m-%Y:%H:%M:%S")

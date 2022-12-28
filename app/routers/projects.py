@@ -5,6 +5,7 @@ from fastapi import APIRouter
 from app import config
 from app.controllers.projects_controller import ProjectsController
 from app.models.projects import Projects
+from app.models.requests.project_update import ProjectsUpdate
 from app.repositories.projects_repository import ProjectsRepository
 
 router = APIRouter()
@@ -26,3 +27,8 @@ async def list_projects(creator_uid: str = None):
 @router.get("/projects/{pid}", tags=["projects"], response_model=Projects)
 async def read_project(pid: str):
     return ProjectsController.get(projects_repository, pid)
+
+
+@router.put("/projects/{pid}", tags=["projects"], response_model=Projects)
+async def update_project(pid: str, project_update: ProjectsUpdate):
+    return ProjectsController.put(projects_repository, pid, project_update)

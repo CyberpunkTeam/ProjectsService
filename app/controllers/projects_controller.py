@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import HTTPException
 from app.models.projects import Projects
 
@@ -5,7 +7,7 @@ from app.models.projects import Projects
 class ProjectsController:
     @staticmethod
     def post(repository, project: Projects):
-        project.pid = project.get_pid()
+        project.complete()
         ok = repository.insert(project)
         if not ok:
             raise HTTPException(status_code=500, detail="Error saving")
@@ -20,3 +22,14 @@ class ProjectsController:
         if pid is not None:
             return result[0]
         return result
+
+    @staticmethod
+    def put(repository, pid, project_update):
+        project_update.pid = pid
+        local = datetime.now()
+        project_update.updated_date = local.strftime("%d-%m-%Y:%H:%M:%S")
+        ok = repository.put(project_update)
+        if not ok:
+            raise HTTPException(status_code=500, detail="Error to update")
+
+        return ProjectsController.get(repository, pid=pid)
