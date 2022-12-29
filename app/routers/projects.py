@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 from fastapi import APIRouter
@@ -12,6 +13,12 @@ router = APIRouter()
 
 # Repository
 projects_repository = ProjectsRepository(config.DATABASE_URL, config.DATABASE_NAME)
+
+
+@router.post("/projects/reset", tags=["team_invitations"], status_code=200)
+async def reset():
+    if os.environ.get("TEST_MODE") == "1":
+        return {"reset": projects_repository.reset()}
 
 
 @router.post("/projects/", tags=["projects"], response_model=Projects, status_code=201)

@@ -35,3 +35,6 @@ class ProjectsRepository(DataBase):
         return self.update(
             self.COLLECTION_NAME, "pid", project_update.pid, project_update
         )
+
+    def reset(self):
+        self.delete_all(self.COLLECTION_NAME)

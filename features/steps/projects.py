@@ -1,3 +1,5 @@
+import random
+
 from behave import *
 
 
@@ -69,7 +71,7 @@ def step_impl(context, name, idioms, description, technologies):
         "idioms": idioms.split(","),
         "description": description,
         "technologies": technologies.split(","),
-        "creator_uid": "1",
+        "creator_uid": f"{random.randint(1, 500)}",
     }
 
     mimetype = "application/json"
@@ -83,6 +85,7 @@ def step_impl(context, name, idioms, description, technologies):
 
     assert context.response.status_code == 201
     context.vars["pid"] = context.response.json()["pid"]
+    context.vars[f"{name}_pid"] = context.response.json()["pid"]
 
 
 @when(
