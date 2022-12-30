@@ -13,6 +13,7 @@ from app.repositories.project_postulations_repository import (
 )
 from .projects import projects_repository
 from ..models.requests.project_postulations_update import ProjectPostulationsUpdate
+from ..models.states import States
 
 router = APIRouter()
 
@@ -47,9 +48,11 @@ async def create_project_postulations(project_postulation: ProjectPostulations):
     tags=["project_postulations"],
     response_model=List[ProjectPostulations],
 )
-async def list_project_postulations(tid: str = None, pid: str = None):
+async def list_project_postulations(
+    tid: str = None, pid: str = None, state: States = None
+):
     return ProjectPostulationsController.get(
-        project_postulations_repository, tid=tid, pid=pid
+        project_postulations_repository, tid=tid, pid=pid, state=state
     )
 
 
