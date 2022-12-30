@@ -15,8 +15,8 @@ class ProjectPostulationsController:
         return project_postulation
 
     @staticmethod
-    def get(repository, pid=None, tid=None, ppid=None):
-        result = repository.get(pid=pid, tid=tid, ppid=ppid)
+    def get(repository, pid=None, tid=None, ppid=None, state=None):
+        result = repository.get(pid=pid, tid=tid, ppid=ppid, state=state)
         if len(result) == 0 and ppid is not None:
             raise HTTPException(status_code=404, detail="Project postulation not found")
 
