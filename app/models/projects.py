@@ -15,7 +15,7 @@ class Projects(BaseModel):
     description: str
     technologies: List[str]
     creator_uid: str
-    state: ProjectStates = ProjectStates.PENDING
+    state: Optional[ProjectStates] = None
     created_date: Optional[str] = ""
     updated_date: Optional[str] = ""
 
@@ -42,6 +42,7 @@ class Projects(BaseModel):
         return str(myuuid)
 
     def complete(self):
+        self.state = ProjectStates.PENDING
         self.pid = Projects.get_pid()
         local = datetime.now()
         self.created_date = local.strftime("%d-%m-%Y:%H:%M:%S")

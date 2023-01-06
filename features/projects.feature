@@ -21,7 +21,7 @@ Feature: CRUD Project
     And veo que tiene nombre "Find my team - platform", idiomas "ingles", descripcion "Plataforma de matcheo de equipos y proyecto" y tenologias "python, react, aws"
 
 
-   Scenario: Update project state to cancelled
+  Scenario: Update project state to cancelled
 
     Given que existe el proyecto con nombre "Find my team", idiomas "ingles, español", descripcion "Plataforma para matcheo de equipos y proyecto" y tenologias "python, react"
 
@@ -32,7 +32,7 @@ Feature: CRUD Project
     And veo que tiene el estado "cancelado"
 
 
-   Scenario: Update project state to finished
+  Scenario: Update project state to finished
 
     Given que existe el proyecto con nombre "Find my team", idiomas "ingles, español", descripcion "Plataforma para matcheo de equipos y proyecto" y tenologias "python, react"
 
@@ -43,7 +43,7 @@ Feature: CRUD Project
     And veo que tiene el estado "finalizado"
 
 
-   Scenario: Update project state to WIP
+  Scenario: Update project state to WIP
 
     Given que existe el proyecto con nombre "Find my team", idiomas "ingles, español", descripcion "Plataforma para matcheo de equipos y proyecto" y tenologias "python, react"
 
@@ -52,3 +52,14 @@ Feature: CRUD Project
     Then se me informa que se actualizo correctamente
 
     And veo que tiene el estado "en proceso"
+
+
+  Scenario: List pending projects
+
+    Given que existe el proyecto con nombre "Find my team", idiomas "ingles, español", descripcion "Plataforma para matcheo de equipos y proyecto" y tenologias "python, react"
+
+    And que existe el proyecto con nombre "Find my team 2", idiomas "ingles, español", descripcion "Plataforma para matcheo de equipos y proyecto" y tenologias "python, react"
+
+    When cuando pido todos los proyectos con estado "pendiente"
+
+    Then me retorna 2 proyectos
