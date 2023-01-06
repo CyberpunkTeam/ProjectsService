@@ -4,6 +4,8 @@ from typing import Optional, List
 
 from pydantic import BaseModel
 
+from app.models.project_states import ProjectStates
+
 
 class ProjectsUpdate(BaseModel):
     pid: Optional[str] = None
@@ -12,6 +14,7 @@ class ProjectsUpdate(BaseModel):
     description: Optional[str] = None
     technologies: Optional[List[str]] = None
     updated_date: Optional[str] = ""
+    state: Optional[ProjectStates]
 
     def to_json(self):
         return loads(self.json(exclude_defaults=True))
