@@ -5,6 +5,8 @@ from typing import Optional, List
 
 from pydantic import BaseModel
 
+from app.models.project_states import ProjectStates
+
 
 class Projects(BaseModel):
     pid: Optional[str] = None
@@ -13,6 +15,7 @@ class Projects(BaseModel):
     description: str
     technologies: List[str]
     creator_uid: str
+    state: ProjectStates = ProjectStates.PENDING
     created_date: Optional[str] = ""
     updated_date: Optional[str] = ""
 
@@ -30,6 +33,7 @@ class Projects(BaseModel):
             "creator_uid": str,
             "created_date": str,
             "updated_date": str,
+            "state": str,
         }
 
     @staticmethod

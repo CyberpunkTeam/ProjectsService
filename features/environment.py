@@ -20,9 +20,15 @@ def before_all(context):
 #
 def before_feature(context, feature):
     use_fixture(app_client, context)
-    context.vars = (
-        {}
-    )  # Rollback de variables entre feature (vars permite compartir variables entre steps)
+    context.vars = {
+        "states2english": {
+            "cancelado": "CANCELLED",
+            "finalizado": "FINISHED",
+            "pendiente": "PENDING",
+            "en proceso": "WIP",
+        }
+    }
+    # Rollback de variables entre feature (vars permite compartir variables entre steps)
     context.client.post("/projects/postulations/reset")
     context.client.post("/projects/reset")
 

@@ -2,6 +2,8 @@ import random
 
 from behave import *
 
+from app.models.project_states import ProjectStates
+
 
 @given("que quiero crear un proyecto")
 def step_impl(context):
@@ -53,6 +55,8 @@ def step_impl(context):
     :type context: behave.runner.Context
     """
     assert context.response.status_code == 201
+    body = context.response.json()
+    assert body.get("state") == ProjectStates.PENDING
 
 
 @given(
@@ -142,3 +146,30 @@ def step_impl(context, name, idioms, description, technologies):
     assert project_updated.get("idioms") == idioms.split(",")
     assert project_updated.get("description") == description
     assert project_updated.get("technologies") == technologies.split(",")
+
+
+@when('edito el estado a "{new_state}"')
+def step_impl(context, new_state):
+    """
+    :param new_state: str
+    :type context: behave.runner.Context
+    """
+    body_to_update = {"state": context.vars["states2english"].get(new_state)}
+    context.vars["body_to_update"] = body_to_update
+    mimetype = "application/json"
+    headers = {"Content-Type": mimetype, "Accept": mimetype}
+
+    url = f"/projects/{context.vars['pid']}"
+
+    context.response = context.client.put(url, json=body_to_update, headers=headers)
+
+
+@step('veo que tiene el estado "{new_state}"')
+def step_impl(context, new_state):
+    """
+    :param new_state: str
+    :type context: behave.runner.Context
+    """
+
+    project_updated = context.response.json()
+    assert project_updated.get("state") == context.vars["states2english"].get(new_state)
