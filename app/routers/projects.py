@@ -5,6 +5,7 @@ from fastapi import APIRouter
 
 from app import config
 from app.controllers.projects_controller import ProjectsController
+from app.models.project_states import ProjectStates
 from app.models.projects import Projects
 from app.models.requests.project_update import ProjectsUpdate
 from app.repositories.projects_repository import ProjectsRepository
@@ -27,8 +28,10 @@ async def create_project(user: Projects):
 
 
 @router.get("/projects/", tags=["projects"], response_model=List[Projects])
-async def list_projects(creator_uid: str = None):
-    return ProjectsController.get(projects_repository, creator_uid=creator_uid)
+async def list_projects(creator_uid: str = None, state: ProjectStates = None):
+    return ProjectsController.get(
+        projects_repository, creator_uid=creator_uid, state=state
+    )
 
 
 @router.get("/projects/{pid}", tags=["projects"], response_model=Projects)

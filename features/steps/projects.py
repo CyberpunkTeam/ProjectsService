@@ -173,3 +173,25 @@ def step_impl(context, new_state):
 
     project_updated = context.response.json()
     assert project_updated.get("state") == context.vars["states2english"].get(new_state)
+
+
+@when('cuando pido todos los proyectos con estado "{state}"')
+def step_impl(context, state):
+    """
+    :param state: str
+    :type context: behave.runner.Context
+    """
+    url = f"/projects/?state={context.vars.get('states2english').get(state)}"
+
+    context.response = context.client.get(url)
+
+
+@then("me retorna {amount} proyectos")
+def step_impl(context, amount):
+    """
+    :param amount: int
+    :type context: behave.runner.Context
+    """
+    assert context.response.status_code == 200
+    projects = context.response.json()
+    assert len(projects) == int(amount)
