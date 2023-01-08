@@ -1,15 +1,12 @@
-import uuid
 from datetime import datetime
-from json import loads
 from typing import Optional
 
-from pydantic import BaseModel
+from app.models.auxiliary_models.currency import Currency
+from app.models.custom_base_model import CustomBaseModel
+from app.models.auxiliary_models.states import States
 
-from app.models.currency import Currency
-from app.models.states import States
 
-
-class ProjectPostulations(BaseModel):
+class ProjectPostulations(CustomBaseModel):
     ppid: Optional[str] = None
     tid: str
     pid: str
@@ -20,9 +17,6 @@ class ProjectPostulations(BaseModel):
     state: Optional[States]
     created_date: Optional[str] = ""
     updated_date: Optional[str] = ""
-
-    def to_json(self):
-        return loads(self.json(exclude_defaults=True))
 
     @staticmethod
     def get_schema():
@@ -39,13 +33,8 @@ class ProjectPostulations(BaseModel):
             "updated_date": str,
         }
 
-    @staticmethod
-    def get_ppid():
-        myuuid = uuid.uuid4()
-        return str(myuuid)
-
     def complete(self):
-        self.ppid = ProjectPostulations.get_ppid()
+        self.ppid = ProjectPostulations.get_id()
         self.state = States.PENDING
         local = datetime.now()
         self.created_date = local.strftime("%d-%m-%Y:%H:%M:%S")

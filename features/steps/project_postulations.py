@@ -1,6 +1,6 @@
 from behave import *
 
-from app.models.states import States
+from app.models.auxiliary_models.states import States
 
 
 @given('que quiero postular a mi equipo "{team_name}" al projecto "{project_name}"')

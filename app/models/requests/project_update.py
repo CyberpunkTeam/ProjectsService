@@ -1,10 +1,9 @@
-import uuid
 from json import loads
 from typing import Optional, List
 
 from pydantic import BaseModel
 
-from app.models.project_states import ProjectStates
+from app.models.auxiliary_models.project_states import ProjectStates
 
 
 class ProjectsUpdate(BaseModel):
