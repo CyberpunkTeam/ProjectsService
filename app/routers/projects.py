@@ -5,7 +5,7 @@ from fastapi import APIRouter
 
 from app import config
 from app.controllers.projects_controller import ProjectsController
-from app.models.project_states import ProjectStates
+from app.models.auxiliary_models.project_states import ProjectStates
 from app.models.projects import Projects
 from app.models.requests.project_update import ProjectsUpdate
 from app.repositories.projects_repository import ProjectsRepository

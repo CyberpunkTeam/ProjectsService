@@ -2,7 +2,7 @@ import random
 
 from behave import *
 
-from app.models.project_states import ProjectStates
+from app.models.auxiliary_models.project_states import ProjectStates
 
 
 @given("que quiero crear un proyecto")

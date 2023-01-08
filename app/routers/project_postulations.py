@@ -13,7 +13,7 @@ from app.repositories.project_postulations_repository import (
 )
 from .projects import projects_repository
 from ..models.requests.project_postulations_update import ProjectPostulationsUpdate
-from ..models.states import States
+from app.models.auxiliary_models.states import States
 
 router = APIRouter()
 
