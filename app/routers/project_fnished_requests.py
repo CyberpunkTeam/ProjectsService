@@ -8,6 +8,9 @@ from ..controllers.project_finished_requests_controller import (
     ProjectFinishedRequestsController,
 )
 from ..models.project_finished_requests import ProjectFinishedRequests
+from ..models.requests.project_finished_requests_update import (
+    ProjectFinishedRequestsUpdate,
+)
 from ..repositories.project_finished_requests_repository import (
     ProjectFinishedRequestsRepository,
 )
@@ -63,4 +66,17 @@ async def list_project_postulations(tid: str = None, pid: str = None):
 async def read_project_postulations(pfr_id: str):
     return ProjectFinishedRequestsController.get(
         project_finished_requests_repository, pfr_id=pfr_id
+    )
+
+
+@router.put(
+    "/project_finished_requests/{pfr_id}",
+    tags=["project_postulations"],
+    response_model=ProjectFinishedRequests,
+)
+async def update_project_postulations(
+    pfr_id: str, project_finished_requests_update: ProjectFinishedRequestsUpdate
+):
+    return ProjectFinishedRequestsController.put(
+        project_finished_requests_repository, pfr_id, project_finished_requests_update
     )

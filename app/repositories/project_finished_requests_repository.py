@@ -40,3 +40,11 @@ class ProjectFinishedRequestsRepository(DataBase):
 
     def reset(self):
         self.delete_all(self.COLLECTION_NAME)
+
+    def put(self, project_finished_request_update):
+        return self.update(
+            self.COLLECTION_NAME,
+            "pfr_id",
+            project_finished_request_update.pfr_id,
+            project_finished_request_update,
+        )

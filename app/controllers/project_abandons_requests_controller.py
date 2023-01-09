@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import HTTPException
 
 from app.models.project_abandons_requests import ProjectAbandonsRequests
@@ -23,3 +25,16 @@ class ProjectAbandonsRequestsController:
         if par_id is not None:
             return result[0]
         return result
+
+    @staticmethod
+    def put(repository, par_id, project_abandons_request_update):
+        project_abandons_request_update.par_id = par_id
+        local = datetime.now()
+        project_abandons_request_update.updated_date = local.strftime(
+            "%d-%m-%Y:%H:%M:%S"
+        )
+        ok = repository.put(project_abandons_request_update)
+        if not ok:
+            raise HTTPException(status_code=500, detail="Error to update")
+
+        return ProjectAbandonsRequestsController.get(repository, par_id=par_id)

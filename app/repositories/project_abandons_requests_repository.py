@@ -39,3 +39,11 @@ class ProjectAbandonsRequestsRepository(DataBase):
 
     def reset(self):
         self.delete_all(self.COLLECTION_NAME)
+
+    def put(self, project_abandons_request_update):
+        return self.update(
+            self.COLLECTION_NAME,
+            "par_id",
+            project_abandons_request_update.par_id,
+            project_abandons_request_update,
+        )

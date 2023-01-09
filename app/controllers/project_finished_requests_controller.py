@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import HTTPException
 
 from app.models.project_finished_requests import ProjectFinishedRequests
@@ -23,3 +25,16 @@ class ProjectFinishedRequestsController:
         if pfr_id is not None:
             return result[0]
         return result
+
+    @staticmethod
+    def put(repository, pfr_id, project_finished_request_update):
+        project_finished_request_update.pfr_id = pfr_id
+        local = datetime.now()
+        project_finished_request_update.updated_date = local.strftime(
+            "%d-%m-%Y:%H:%M:%S"
+        )
+        ok = repository.put(project_finished_request_update)
+        if not ok:
+            raise HTTPException(status_code=500, detail="Error to update")
+
+        return ProjectFinishedRequestsController.get(repository, pfr_id=pfr_id)

@@ -1,5 +1,7 @@
 from behave import *
 
+from app.models.auxiliary_models.request_states import RequestStates
+
 
 @step("el owner a cargo de proyecto crea la solicitud de abandono del proyecto")
 def step_impl(context):
@@ -39,3 +41,39 @@ def step_impl(context):
     url = "/project_abandons_requests/" + par_id
 
     context.response = context.client.get(url)
+
+
+@when("actualizo la solicitud de {request_type} a {new_state}")
+def step_impl(context, request_type, new_state):
+    """
+    :param request_type: str
+    :poram new_state: str
+    :type context: behave.runner.Context
+    """
+    state = (
+        RequestStates.ACCEPTED if new_state == "aceptado" else RequestStates.REJECTED
+    )
+    context.vars["new_state"] = state
+    body = {"state": state}
+
+    mimetype = "application/json"
+    headers = {"Content-Type": mimetype, "Accept": mimetype}
+
+    if request_type == "abandonado":
+        par_id = context.response.json()["par_id"]
+        url = f"/project_abandons_requests/{par_id}"
+    else:
+        pfr_id = context.response.json()["pfr_id"]
+        url = f"/project_finished_requests/{pfr_id}"
+    context.response = context.client.put(url, json=body, headers=headers)
+
+    assert context.response.status_code == 200
+
+
+@then("puedo ver que la solicitud se actualizo correctamente")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    state = context.response.json()["state"]
+    assert context.vars["new_state"] == state
