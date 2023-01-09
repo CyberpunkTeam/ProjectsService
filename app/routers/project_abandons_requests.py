@@ -6,7 +6,7 @@ from app import config
 from ..controllers.project_abandons_requests_controller import (
     ProjectAbandonsRequestsController,
 )
-from ..models.project_abandons_request import ProjectAbandonsRequests
+from ..models.project_abandons_requests import ProjectAbandonsRequests
 from ..repositories.project_abandons_requests_repository import (
     ProjectAbandonsRequestsRepository,
 )

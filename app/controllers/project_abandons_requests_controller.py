@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 
-from app.models.project_abandons_request import ProjectAbandonsRequests
+from app.models.project_abandons_requests import ProjectAbandonsRequests
 
 
 class ProjectAbandonsRequestsController:
