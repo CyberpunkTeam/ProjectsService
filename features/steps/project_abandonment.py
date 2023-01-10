@@ -1,5 +1,7 @@
 from behave import *
 
+from app.models.auxiliary_models.project_states import ProjectStates
+
 
 @step("el equipo a cargo de proyecto crea el abandono del proyecto")
 def step_impl(context):
@@ -50,3 +52,17 @@ def step_impl(context):
     content = context.response.json()
     reasons = content["reasons"]
     assert reasons == context.vars["reasons"]
+
+
+@step("el estado del proyecto esta pendiente")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    content = context.response.json()
+    pid = content["pid"]
+    url = f"/projects/{pid}"
+
+    response = context.client.get(url)
+    state = response.json()["state"]
+    assert state == ProjectStates.PENDING

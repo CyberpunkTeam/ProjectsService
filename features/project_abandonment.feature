@@ -10,3 +10,4 @@ Feature: CRUD project abandonment
     And el equipo a cargo de proyecto crea el abandono del proyecto
     When pido el abandono creado
     Then puedo ver las razones por las cual se abandono
+    And el estado del proyecto esta pendiente
