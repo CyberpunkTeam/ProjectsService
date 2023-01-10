@@ -13,6 +13,7 @@ from app.repositories.project_postulations_repository import (
 )
 from .projects import projects_repository
 from ..controllers.projects_controller import ProjectsController
+from ..models.auxiliary_models.project_states import ProjectStates
 from ..models.requests.project_postulations_update import ProjectPostulationsUpdate
 from app.models.auxiliary_models.states import States
 from ..models.requests.project_update import ProjectsUpdate
@@ -79,7 +80,9 @@ async def update_project_postulations(
         project_postulation = ProjectPostulationsController.get(
             project_postulations_repository, ppid=ppid
         )
-        project_update = ProjectsUpdate(team_assigned=project_postulation.tid)
+        project_update = ProjectsUpdate(
+            team_assigned=project_postulation.tid, state=ProjectStates.WIP
+        )
         ProjectsController.put(
             projects_repository, project_postulation.pid, project_update
         )
