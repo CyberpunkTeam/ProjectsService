@@ -12,8 +12,10 @@ from app.repositories.project_postulations_repository import (
     ProjectPostulationsRepository,
 )
 from .projects import projects_repository
+from ..controllers.projects_controller import ProjectsController
 from ..models.requests.project_postulations_update import ProjectPostulationsUpdate
 from app.models.auxiliary_models.states import States
+from ..models.requests.project_update import ProjectsUpdate
 
 router = APIRouter()
 
@@ -66,13 +68,22 @@ async def read_project_postulations(ppid: str):
 
 
 @router.put(
-    "/projects/postulations/{pid}",
+    "/projects/postulations/{ppid}",
     tags=["project_postulations"],
     response_model=ProjectPostulations,
 )
 async def update_project_postulations(
-    pid: str, project_update: ProjectPostulationsUpdate
+    ppid: str, project_postulation_update: ProjectPostulationsUpdate
 ):
+    if project_postulation_update.state == States.ACCEPTED:
+        project_postulation = ProjectPostulationsController.get(
+            project_postulations_repository, ppid=ppid
+        )
+        project_update = ProjectsUpdate(team_assigned=project_postulation.tid)
+        ProjectsController.put(
+            projects_repository, project_postulation.pid, project_update
+        )
+
     return ProjectPostulationsController.put(
-        project_postulations_repository, pid, project_update
+        project_postulations_repository, ppid, project_postulation_update
     )

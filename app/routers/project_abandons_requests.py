@@ -6,7 +6,10 @@ from app import config
 from ..controllers.project_abandons_requests_controller import (
     ProjectAbandonsRequestsController,
 )
-from ..models.project_abandons_request import ProjectAbandonsRequests
+from ..models.project_abandons_requests import ProjectAbandonsRequests
+from ..models.requests.project_abandons_requests_update import (
+    ProjectAbandonsRequestsUpdate,
+)
 from ..repositories.project_abandons_requests_repository import (
     ProjectAbandonsRequestsRepository,
 )
@@ -62,4 +65,17 @@ async def list_project_postulations(tid: str = None, pid: str = None):
 async def read_project_postulations(par_id: str):
     return ProjectAbandonsRequestsController.get(
         project_abandons_requests_repository, par_id=par_id
+    )
+
+
+@router.put(
+    "/project_abandons_requests/{par_id}",
+    tags=["project_postulations"],
+    response_model=ProjectAbandonsRequests,
+)
+async def update_project_postulations(
+    par_id: str, project_abandons_requests_update: ProjectAbandonsRequestsUpdate
+):
+    return ProjectAbandonsRequestsController.put(
+        project_abandons_requests_repository, par_id, project_abandons_requests_update
     )

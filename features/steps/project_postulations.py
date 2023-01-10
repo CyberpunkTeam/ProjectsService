@@ -171,3 +171,17 @@ def step_impl(context, state):
     states = {"aceptada": States.ACCEPTED, "cancelada": States.REJECTED}
     body = context.response.json()
     assert body.get("state") == states[state]
+
+
+@step("el projecto tiene al equipo como asignado")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    body = context.response.json()
+    pid = body.get("pid")
+    url = f"/projects/{pid}"
+
+    response = context.client.get(url)
+    team_assigned = response.json()["team_assigned"]
+    assert team_assigned == context.vars["tid"]

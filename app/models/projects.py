@@ -15,6 +15,7 @@ class Projects(CustomBaseModel):
     state: Optional[ProjectStates] = None
     created_date: Optional[str] = ""
     updated_date: Optional[str] = ""
+    team_assigned: Optional[str] = None
 
     @staticmethod
     def get_schema():
@@ -28,6 +29,7 @@ class Projects(CustomBaseModel):
             "created_date": str,
             "updated_date": str,
             "state": str,
+            "team_assigned": str,
         }
 
     def complete(self):
