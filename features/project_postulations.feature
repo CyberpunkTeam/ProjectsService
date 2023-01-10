@@ -28,7 +28,8 @@ Feature: CRUD Project Postulations
     And que el equipo "Alfa" se postulo mi projecto "Find my team"
     When acepto la postulacion
     Then la postulacion figura como aceptada
-    And  el projecto tiene al equipo como asignado
+    And el proyecto tiene al equipo como asignado
+    And el proyecto esta en proceso
 
   Scenario: Reject postulation
     Given que existe el proyecto con nombre "Find my team", idiomas "ingles, español", descripcion "Plataforma para matcheo de equipos y proyecto" y tenologias "python, react"

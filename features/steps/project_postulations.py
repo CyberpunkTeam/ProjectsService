@@ -1,5 +1,6 @@
 from behave import *
 
+from app.models.auxiliary_models.project_states import ProjectStates
 from app.models.auxiliary_models.states import States
 
 
@@ -173,7 +174,7 @@ def step_impl(context, state):
     assert body.get("state") == states[state]
 
 
-@step("el projecto tiene al equipo como asignado")
+@step("el proyecto tiene al equipo como asignado")
 def step_impl(context):
     """
     :type context: behave.runner.Context
@@ -185,3 +186,17 @@ def step_impl(context):
     response = context.client.get(url)
     team_assigned = response.json()["team_assigned"]
     assert team_assigned == context.vars["tid"]
+
+
+@step("el proyecto esta en proceso")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    body = context.response.json()
+    pid = body.get("pid")
+    url = f"/projects/{pid}"
+
+    response = context.client.get(url)
+    state = response.json()["state"]
+    assert state == ProjectStates.WIP
