@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, List
-
+from app.models.auxiliary_models.activities_record import ActivitiesRecord
 from app.models.custom_base_model import CustomBaseModel
 from app.models.auxiliary_models.project_states import ProjectStates
 
@@ -16,6 +16,7 @@ class Projects(CustomBaseModel):
     created_date: Optional[str] = ""
     updated_date: Optional[str] = ""
     team_assigned: Optional[str] = None
+    activities_record: Optional[List[ActivitiesRecord]] = []
 
     @staticmethod
     def get_schema():
@@ -30,11 +31,13 @@ class Projects(CustomBaseModel):
             "updated_date": str,
             "state": str,
             "team_assigned": str,
+            "activities_record": list,
         }
 
     def complete(self):
         self.state = ProjectStates.PENDING
         self.pid = Projects.get_id()
         local = datetime.now()
-        self.created_date = local.strftime("%d-%m-%Y:%H:%M:%S")
-        self.updated_date = local.strftime("%d-%m-%Y:%H:%M:%S")
+        created_date = local.strftime("%d-%m-%Y:%H:%M:%S")
+        self.created_date = created_date
+        self.updated_date = created_date

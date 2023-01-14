@@ -4,9 +4,13 @@ from typing import List
 from fastapi import APIRouter
 
 from app import config
+from . import auxiliary_repository
 from .projects import projects_repository
+from ..controllers.activities_record_controller import ActivitiesRecordController
 from ..controllers.project_abandonment_controller import ProjectAbandonmentController
 from ..controllers.projects_controller import ProjectsController
+from ..models.auxiliary_models.actions import Actions
+from ..models.auxiliary_models.activities_record import ActivitiesRecord
 from ..models.auxiliary_models.project_states import ProjectStates
 from ..models.project_abandonment import ProjectAbandonment
 from ..models.requests.project_update import ProjectsUpdate
@@ -36,7 +40,16 @@ async def reset():
 )
 async def create_project_abandonment(project_abandonment: ProjectAbandonment):
     project_update = ProjectsUpdate(state=ProjectStates.PENDING)
-    ProjectsController.put(projects_repository, project_abandonment.pid, project_update)
+    ProjectsController.put(
+        projects_repository,
+        auxiliary_repository,
+        project_abandonment.pid,
+        project_update,
+    )
+
+    activity = ActivitiesRecord(action=Actions.ABANDONED, pid=project_abandonment.pid)
+    ActivitiesRecordController.post(auxiliary_repository, activity)
+
     return ProjectAbandonmentController.post(
         project_abandonment_repository, project_abandonment
     )

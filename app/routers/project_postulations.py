@@ -11,12 +11,17 @@ from app.models.project_postulations import ProjectPostulations
 from app.repositories.project_postulations_repository import (
     ProjectPostulationsRepository,
 )
+from . import auxiliary_repository
 from .projects import projects_repository
+from ..controllers.activities_record_controller import ActivitiesRecordController
 from ..controllers.projects_controller import ProjectsController
+from ..models.auxiliary_models.actions import Actions
+from ..models.auxiliary_models.activities_record import ActivitiesRecord
 from ..models.auxiliary_models.project_states import ProjectStates
 from ..models.requests.project_postulations_update import ProjectPostulationsUpdate
 from app.models.auxiliary_models.states import States
 from ..models.requests.project_update import ProjectsUpdate
+
 
 router = APIRouter()
 
@@ -84,8 +89,16 @@ async def update_project_postulations(
             team_assigned=project_postulation.tid, state=ProjectStates.WIP
         )
         ProjectsController.put(
-            projects_repository, project_postulation.pid, project_update
+            projects_repository,
+            auxiliary_repository,
+            project_postulation.pid,
+            project_update,
         )
+
+        activity = ActivitiesRecord(
+            action=Actions.TEAM_ASSIGNED, pid=project_postulation.pid
+        )
+        ActivitiesRecordController.post(auxiliary_repository, activity)
 
     return ProjectPostulationsController.put(
         project_postulations_repository, ppid, project_postulation_update

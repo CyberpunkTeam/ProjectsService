@@ -2,6 +2,8 @@ import random
 
 from behave import *
 
+from app.models.auxiliary_models.actions import Actions
+from app.models.auxiliary_models.activities_record import ActivitiesRecord
 from app.models.auxiliary_models.project_states import ProjectStates
 
 
@@ -57,6 +59,11 @@ def step_impl(context):
     assert context.response.status_code == 201
     body = context.response.json()
     assert body.get("state") == ProjectStates.PENDING
+    assert len(body.get("activities_record")) == 1
+    activity = body.get("activities_record")[0]
+    activity_expected = ActivitiesRecord(action=Actions.CREATED, pid="fake")
+    activity_expected.complete()
+    assert activity.get("description") == activity_expected.description
 
 
 @given(
@@ -173,6 +180,17 @@ def step_impl(context, new_state):
 
     project_updated = context.response.json()
     assert project_updated.get("state") == context.vars["states2english"].get(new_state)
+
+    action = ""
+    if new_state == "finalizado":
+        action = Actions.FINISHED
+    elif new_state == "cancelado":
+        action = Actions.CANCELLED
+    if action != "":
+        activity = project_updated.get("activities_record")[1]
+        activity_expected = ActivitiesRecord(action=action, pid="fake")
+        activity_expected.complete()
+        assert activity.get("description") == activity_expected.description
 
 
 @when('cuando pido todos los proyectos con estado "{state}"')
