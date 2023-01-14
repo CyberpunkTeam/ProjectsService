@@ -1,5 +1,7 @@
 from behave import *
 
+from app.models.auxiliary_models.actions import Actions
+from app.models.auxiliary_models.activities_record import ActivitiesRecord
 from app.models.auxiliary_models.project_states import ProjectStates
 
 
@@ -64,5 +66,11 @@ def step_impl(context):
     url = f"/projects/{pid}"
 
     response = context.client.get(url)
-    state = response.json()["state"]
+    project = response.json()
+    state = project["state"]
     assert state == ProjectStates.PENDING
+
+    activity = project.get("activities_record")[1]
+    activity_expected = ActivitiesRecord(action=Actions.ABANDONED, pid="fake")
+    activity_expected.complete()
+    assert activity.get("description") == activity_expected.description

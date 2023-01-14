@@ -1,30 +1,60 @@
 from datetime import datetime
 
 from fastapi import HTTPException
+
+from app.controllers.activities_record_controller import ActivitiesRecordController
+from app.models.auxiliary_models.actions import Actions
+from app.models.auxiliary_models.activities_record import ActivitiesRecord
+from app.models.auxiliary_models.project_states import ProjectStates
 from app.models.projects import Projects
 
 
 class ProjectsController:
     @staticmethod
-    def post(repository, project: Projects):
+    def post(repository, auxiliary_repository, project: Projects):
         project.complete()
         ok = repository.insert(project)
         if not ok:
             raise HTTPException(status_code=500, detail="Error saving")
+
+        activity = ActivitiesRecord(action=Actions.CREATED, pid=project.pid)
+        activity.complete()
+        activity = ActivitiesRecordController.post(auxiliary_repository, activity)
+
+        project.activities_record.append(activity)
         return project
 
     @staticmethod
-    def get(repository, pid=None, creator_uid=None, state=None):
+    def get(repository, auxiliary_repository, pid=None, creator_uid=None, state=None):
         result = repository.get(pid=pid, creator_uid=creator_uid, state=state)
         if len(result) == 0 and pid is not None:
             raise HTTPException(status_code=404, detail="Project not found")
 
         if pid is not None:
-            return result[0]
+            project_to_return = result[0]
+            activities = ActivitiesRecordController.get(auxiliary_repository, pid)
+            project_to_return.activities_record = activities
+            return project_to_return
         return result
 
     @staticmethod
-    def put(repository, pid, project_update):
+    def put(repository, auxiliary_repository, pid, project_update):
+        project = ProjectsController.get(repository, auxiliary_repository, pid)
+
+        if (
+            project_update.state == ProjectStates.FINISHED
+            and project.state != ProjectStates.FINISHED
+        ):
+            activity = ActivitiesRecord(action=Actions.FINISHED, pid=pid)
+            ActivitiesRecordController.post(auxiliary_repository, activity)
+
+        elif (
+            project_update.state == ProjectStates.CANCELLED
+            and project.state != ProjectStates.CANCELLED
+        ):
+            activity = ActivitiesRecord(action=Actions.CANCELLED, pid=pid)
+            ActivitiesRecordController.post(auxiliary_repository, activity)
+
         project_update.pid = pid
         local = datetime.now()
         project_update.updated_date = local.strftime("%d-%m-%Y:%H:%M:%S")
@@ -32,4 +62,4 @@ class ProjectsController:
         if not ok:
             raise HTTPException(status_code=500, detail="Error to update")
 
-        return ProjectsController.get(repository, pid=pid)
+        return ProjectsController.get(repository, auxiliary_repository, pid=pid)
