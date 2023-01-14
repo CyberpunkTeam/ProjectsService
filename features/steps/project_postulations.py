@@ -1,5 +1,7 @@
 from behave import *
 
+from app.models.auxiliary_models.actions import Actions
+from app.models.auxiliary_models.activities_record import ActivitiesRecord
 from app.models.auxiliary_models.project_states import ProjectStates
 from app.models.auxiliary_models.states import States
 
@@ -184,8 +186,14 @@ def step_impl(context):
     url = f"/projects/{pid}"
 
     response = context.client.get(url)
-    team_assigned = response.json()["team_assigned"]
+    project = response.json()
+    team_assigned = project["team_assigned"]
     assert team_assigned == context.vars["tid"]
+
+    activity = project.get("activities_record")[1]
+    activity_expected = ActivitiesRecord(action=Actions.TEAM_ASSIGNED, pid="fake")
+    activity_expected.complete()
+    assert activity.get("description") == activity_expected.description
 
 
 @step("el proyecto esta en proceso")

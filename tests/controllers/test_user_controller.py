@@ -27,7 +27,7 @@ def test_get_all_projects():
             creator_uid="1",
         ),
     ]
-    result = ProjectsController.get(repository)
+    result = ProjectsController.get(repository, repository)
     assert len(result) == 2
 
 
@@ -51,7 +51,7 @@ def test_get_project():
             creator_uid="1",
         ),
     ]
-    result = ProjectsController.get(repository, "1")
+    result = ProjectsController.get(repository, repository, "1")
     assert result.name == "Findmyteam"
 
 
@@ -59,7 +59,7 @@ def test_error_project_not_found():
     repository = Mock()
     repository.get.return_value = []
     with pytest.raises(HTTPException):
-        ProjectsController.get(repository, pid="1")
+        ProjectsController.get(repository, repository, pid="1")
 
 
 def test_create_project():
@@ -73,7 +73,7 @@ def test_create_project():
         idioms=["English"],
         creator_uid="1",
     )
-    result = ProjectsController.post(repository, project)
+    result = ProjectsController.post(repository, repository, project)
     assert result == project
 
 
@@ -89,4 +89,4 @@ def test_error_create_user():
         creator_uid="1",
     )
     with pytest.raises(HTTPException):
-        ProjectsController.post(repository, project)
+        ProjectsController.post(repository, repository, project)
