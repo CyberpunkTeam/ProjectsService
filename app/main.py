@@ -6,6 +6,7 @@ from .routers import (
     project_abandonment,
     project_abandons_requests,
     project_finished_requests,
+    projects_reviews,
 )
 
 
@@ -18,3 +19,4 @@ app.include_router(project_postulations.router)
 app.include_router(project_abandonment.router)
 app.include_router(project_abandons_requests.router)
 app.include_router(project_finished_requests.router)
+app.include_router(projects_reviews.router)
