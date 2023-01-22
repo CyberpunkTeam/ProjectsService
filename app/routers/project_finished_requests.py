@@ -7,13 +7,18 @@ from app import config
 from ..controllers.project_finished_requests_controller import (
     ProjectFinishedRequestsController,
 )
+from ..controllers.projects_controller import ProjectsController
+from ..models.auxiliary_models.project_states import ProjectStates
 from ..models.project_finished_requests import ProjectFinishedRequests
 from ..models.requests.project_finished_requests_update import (
     ProjectFinishedRequestsUpdate,
 )
+from ..models.requests.project_update import ProjectsUpdate
 from ..repositories.project_finished_requests_repository import (
     ProjectFinishedRequestsRepository,
 )
+from .projects import projects_repository
+from . import auxiliary_repository
 
 router = APIRouter()
 
@@ -42,6 +47,13 @@ async def reset():
 async def create_project_postulations(
     project_finished_requests: ProjectFinishedRequests,
 ):
+    project_update = ProjectsUpdate(state=ProjectStates.FINISH_REQUEST)
+    ProjectsController.put(
+        projects_repository,
+        auxiliary_repository,
+        project_finished_requests.pid,
+        project_update,
+    )
     return ProjectFinishedRequestsController.post(
         project_finished_requests_repository, project_finished_requests
     )
