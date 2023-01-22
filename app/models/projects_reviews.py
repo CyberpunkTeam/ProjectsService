@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from app.models.custom_base_model import CustomBaseModel
+from app.models.projects import Projects
 
 
 class ProjectsReviews(CustomBaseModel):
@@ -9,6 +10,7 @@ class ProjectsReviews(CustomBaseModel):
     tid: str
     created_date: Optional[str] = ""
     rating: int
+    project: Optional[Projects] = None
 
     @staticmethod
     def get_schema():
