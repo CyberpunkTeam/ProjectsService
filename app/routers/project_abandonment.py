@@ -39,7 +39,7 @@ async def reset():
     status_code=201,
 )
 async def create_project_abandonment(project_abandonment: ProjectAbandonment):
-    project_update = ProjectsUpdate(state=ProjectStates.PENDING)
+    project_update = ProjectsUpdate(state=ProjectStates.PENDING, team_assigned="")
     ProjectsController.put(
         projects_repository,
         auxiliary_repository,
