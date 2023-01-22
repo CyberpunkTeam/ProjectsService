@@ -54,6 +54,12 @@ class ProjectsController:
         ):
             activity = ActivitiesRecord(action=Actions.CANCELLED, pid=pid)
             ActivitiesRecordController.post(auxiliary_repository, activity)
+        elif project_update.state == ProjectStates.ABANDONS_REQUEST:
+            activity = ActivitiesRecord(action=Actions.ABANDONS_REQUEST, pid=pid)
+            ActivitiesRecordController.post(auxiliary_repository, activity)
+        elif project_update.state == ProjectStates.FINISH_REQUEST:
+            activity = ActivitiesRecord(action=Actions.FINISH_REQUEST, pid=pid)
+            ActivitiesRecordController.post(auxiliary_repository, activity)
 
         project_update.pid = pid
         local = datetime.now()

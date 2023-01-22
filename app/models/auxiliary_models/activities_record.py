@@ -27,5 +27,7 @@ class ActivitiesRecord(CustomBaseModel):
             Actions.CANCELLED: "El proyecto fue cancelado",
             Actions.ABANDONED: "El equipo asignado abandono el proyecto",
             Actions.TEAM_ASSIGNED: "El proyecto tiene equipo asignado",
+            Actions.FINISH_REQUEST: "Se envio solicitud de finalizacion de proyecto",
+            Actions.ABANDONS_REQUEST: "Se envio solicitud de abandono al equipo asignado",
         }
         return titles[self.action]

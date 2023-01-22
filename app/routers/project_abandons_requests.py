@@ -3,16 +3,22 @@ from typing import List
 from fastapi import APIRouter
 
 from app import config
+from . import auxiliary_repository
 from ..controllers.project_abandons_requests_controller import (
     ProjectAbandonsRequestsController,
 )
+from ..controllers.projects_controller import ProjectsController
+from ..models.auxiliary_models.project_states import ProjectStates
 from ..models.project_abandons_requests import ProjectAbandonsRequests
 from ..models.requests.project_abandons_requests_update import (
     ProjectAbandonsRequestsUpdate,
 )
+from ..models.requests.project_update import ProjectsUpdate
 from ..repositories.project_abandons_requests_repository import (
     ProjectAbandonsRequestsRepository,
 )
+from .projects import projects_repository
+
 
 router = APIRouter()
 
@@ -41,6 +47,13 @@ async def reset():
 async def create_project_postulations(
     project_abandons_requests: ProjectAbandonsRequests,
 ):
+    project_update = ProjectsUpdate(state=ProjectStates.ABANDONS_REQUEST)
+    ProjectsController.put(
+        projects_repository,
+        auxiliary_repository,
+        project_abandons_requests.pid,
+        project_update,
+    )
     return ProjectAbandonsRequestsController.post(
         project_abandons_requests_repository, project_abandons_requests
     )
