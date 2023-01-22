@@ -1,5 +1,6 @@
 from behave import *
 
+from app.models.auxiliary_models.project_states import ProjectStates
 from app.models.auxiliary_models.request_states import RequestStates
 
 
@@ -51,3 +52,18 @@ def step_impl(context):
     :type context: behave.runner.Context
     """
     assert context.response.json()["state"] == RequestStates.PENDING
+
+
+@step("el proyecto tiene estado de solicitud de finalizacion enviado")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    pid = context.vars["pid"]
+    url = f"/projects/{pid}"
+    response = context.client.get(url)
+    assert response.status_code == 200
+
+    project = response.json()
+    state = project.get("state")
+    assert state == ProjectStates.FINISH_REQUEST

@@ -10,6 +10,7 @@ Feature: CRUD project abandons requests
     And el owner a cargo de proyecto crea la solicitud de abandono del proyecto
     When pido la solicitud de abandono creada
     Then puedo ver las razones por las cual se abandono
+    And el proyecto tiene estado de solicitud de abandono enviado
 
   Scenario: Update project abandons requests state
     Given que existe el proyecto con nombre "Find my team", idiomas "ingles, español", descripcion "Plataforma para matcheo de equipos y proyecto" y tenologias "python, react"
