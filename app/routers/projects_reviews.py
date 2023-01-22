@@ -4,10 +4,12 @@ from typing import List
 from fastapi import APIRouter
 
 from app import config
+from app.controllers.projects_controller import ProjectsController
 from app.controllers.projects_reviews_controller import ProjectsReviewsController
 from app.models.projects_reviews import ProjectsReviews
 from app.repositories.projects_reviews_repository import ProjectsReviewsRepository
-
+from app.routers import auxiliary_repository
+from app.routers.projects import projects_repository
 
 router = APIRouter()
 
@@ -39,4 +41,14 @@ async def create_project(project_review: ProjectsReviews):
     response_model=List[ProjectsReviews],
 )
 async def list_projects(pid: str = None, tid: str = None):
-    return ProjectsReviewsController.get(projects_reviews_repository, pid=pid, tid=tid)
+    results = ProjectsReviewsController.get(
+        projects_reviews_repository, pid=pid, tid=tid
+    )
+    if pid is None and tid is not None:
+        for review in results:
+            pid = review.pid
+            project = ProjectsController.get(
+                projects_repository, auxiliary_repository, pid
+            )
+            review.project = project
+    return results
