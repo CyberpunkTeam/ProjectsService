@@ -67,3 +67,21 @@ def step_impl(context):
     project = response.json()
     state = project.get("state")
     assert state == ProjectStates.FINISH_REQUEST
+
+
+@step('el proyecto con nombre "{name}" esta {state_input}')
+def step_impl(context, name, state_input):
+    """
+    :type context: behave.runner.Context
+    """
+    pid = context.vars["pid"]
+    url = f"/projects/{pid}"
+    response = context.client.get(url)
+    assert response.status_code == 200
+
+    project = response.json()
+    state = project.get("state")
+    if state_input == "finalizado":
+        assert state == ProjectStates.FINISHED
+    else:
+        assert state == ProjectStates.WIP
