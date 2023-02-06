@@ -22,12 +22,12 @@ class ActivitiesRecord(CustomBaseModel):
 
     def _get_description(self):
         titles = {
-            Actions.FINISHED: "El proyecto ha finalizado",
-            Actions.CREATED: "El proyecto se creo",
-            Actions.CANCELLED: "El proyecto fue cancelado",
-            Actions.ABANDONED: "El equipo asignado abandono el proyecto",
-            Actions.TEAM_ASSIGNED: "El proyecto tiene equipo asignado",
-            Actions.FINISH_REQUEST: "Se envio solicitud de finalizacion de proyecto",
-            Actions.ABANDONS_REQUEST: "Se envio solicitud de abandono al equipo asignado",
+            Actions.FINISHED: "Project finished",
+            Actions.CREATED: "Project created",
+            Actions.CANCELLED: "Project cancelled",
+            Actions.ABANDONED: "Team assigned abandoned the project",
+            Actions.TEAM_ASSIGNED: "Project has team assigned",
+            Actions.FINISH_REQUEST: "Project finish request sent",
+            Actions.ABANDONS_REQUEST: "Project abandon request sent",
         }
         return titles[self.action]
