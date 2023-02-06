@@ -9,6 +9,7 @@ from ..controllers.project_finished_requests_controller import (
 )
 from ..controllers.projects_controller import ProjectsController
 from ..models.auxiliary_models.project_states import ProjectStates
+from ..models.auxiliary_models.request_states import RequestStates
 from ..models.project_finished_requests import ProjectFinishedRequests
 from ..models.requests.project_finished_requests_update import (
     ProjectFinishedRequestsUpdate,
@@ -89,6 +90,24 @@ async def read_project_postulations(pfr_id: str):
 async def update_project_postulations(
     pfr_id: str, project_finished_requests_update: ProjectFinishedRequestsUpdate
 ):
-    return ProjectFinishedRequestsController.put(
+    request_updated = ProjectFinishedRequestsController.put(
         project_finished_requests_repository, pfr_id, project_finished_requests_update
     )
+    pid = request_updated.pid
+    if project_finished_requests_update.state == RequestStates.ACCEPTED:
+        project_update = ProjectsUpdate(state=ProjectStates.FINISHED)
+        ProjectsController.put(
+            projects_repository,
+            auxiliary_repository,
+            pid,
+            project_update,
+        )
+    elif project_finished_requests_update.state == RequestStates.REJECTED:
+        project_update = ProjectsUpdate(state=ProjectStates.WIP)
+        ProjectsController.put(
+            projects_repository,
+            auxiliary_repository,
+            pid,
+            project_update,
+        )
+    return request_updated
