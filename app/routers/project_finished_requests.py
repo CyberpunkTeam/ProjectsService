@@ -94,15 +94,7 @@ async def update_project_postulations(
         project_finished_requests_repository, pfr_id, project_finished_requests_update
     )
     pid = request_updated.pid
-    if project_finished_requests_update.state == RequestStates.ACCEPTED:
-        project_update = ProjectsUpdate(state=ProjectStates.FINISHED)
-        ProjectsController.put(
-            projects_repository,
-            auxiliary_repository,
-            pid,
-            project_update,
-        )
-    elif project_finished_requests_update.state == RequestStates.REJECTED:
+    if project_finished_requests_update.state == RequestStates.REJECTED:
         project_update = ProjectsUpdate(state=ProjectStates.WIP)
         ProjectsController.put(
             projects_repository,
