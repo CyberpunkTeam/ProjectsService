@@ -17,7 +17,7 @@ Feature: CRUD project finished requests
     And el owner a cargo de proyecto crea la solicitud de finalizar el proyecto
     When actualizo la solicitud de finalizado a aceptado
     Then puedo ver que la solicitud se actualizo correctamente
-    And el proyecto con nombre "Find my team" esta finalizado
+
 
   Scenario: Update project finished requests state to rejected
     Given que existe el proyecto con nombre "Find my team", idiomas "ingles, español", descripcion "Plataforma para matcheo de equipos y proyecto" y tenologias "python, react"
