@@ -4,7 +4,9 @@ from behave import *
 
 from app.models.auxiliary_models.actions import Actions
 from app.models.auxiliary_models.activities_record import ActivitiesRecord
+from app.models.auxiliary_models.currency import Currency
 from app.models.auxiliary_models.project_states import ProjectStates
+from app.models.auxiliary_models.unit_duration import UnitDuration
 
 
 @given("que quiero crear un proyecto")
@@ -16,9 +18,19 @@ def step_impl(context):
 
 
 @when(
-    'completo alta de proyecto, con nombre "{name}", idiomas "{idioms}", descripcion "{description}" y tenologias "{technologies}"'
+    'completo alta de proyecto, con nombre "{name}", idiomas "{idioms}", descripcion "{description}", presupuesto "{tentative_budget}" {currency}, con duracion tentativa de {duration} {unit_duration} y tenologias "{technologies}"'
 )
-def step_impl(context, name, idioms, description, technologies):
+def step_impl(
+    context,
+    name,
+    idioms,
+    description,
+    tentative_budget,
+    currency,
+    duration,
+    unit_duration,
+    technologies,
+):
     """
     :param name: str
     :param idioms:str
@@ -26,13 +38,18 @@ def step_impl(context, name, idioms, description, technologies):
     .param technologies:str
     :type context: behave.runner.Context
     """
-
     context.vars["project_to_save"] = {
         "name": name,
         "idioms": idioms.split(","),
-        "description": description,
-        "technologies": technologies.split(","),
+        "description": {"summary": description},
+        "technologies": {"programming_language": technologies.split(",")},
         "creator_uid": "1",
+        "tentative_budget": float(tentative_budget),
+        "budget_currency": Currency.DOLAR if currency == "dolares" else Currency.EURO,
+        "tentative_duration": int(duration),
+        "unit_duration": UnitDuration.DAYS
+        if unit_duration == "dias"
+        else UnitDuration.MONTHS,
     }
 
 
@@ -80,9 +97,13 @@ def step_impl(context, name, idioms, description, technologies):
     context.vars["project_to_save"] = {
         "name": name,
         "idioms": idioms.split(","),
-        "description": description,
-        "technologies": technologies.split(","),
+        "description": {"summary": description},
+        "technologies": {"programming_language": technologies.split(",")},
         "creator_uid": f"{random.randint(1, 500)}",
+        "tentative_budget": float(1000),
+        "budget_currency": Currency.DOLAR,
+        "tentative_duration": int(7),
+        "unit_duration": UnitDuration.DAYS,
     }
 
     mimetype = "application/json"
@@ -114,8 +135,8 @@ def step_impl(context, name, idioms, description, technologies):
     context.vars["project_to_save"] = {
         "name": name,
         "idioms": idioms.split(","),
-        "description": description,
-        "technologies": technologies.split(","),
+        "description": {"summary": description},
+        "technologies": {"programming_language": technologies.split(",")},
     }
 
     mimetype = "application/json"
@@ -151,8 +172,10 @@ def step_impl(context, name, idioms, description, technologies):
     project_updated = context.response.json()
     assert project_updated.get("name") == name
     assert project_updated.get("idioms") == idioms.split(",")
-    assert project_updated.get("description") == description
-    assert project_updated.get("technologies") == technologies.split(",")
+    assert project_updated.get("description").get("summary") == description
+    assert project_updated.get("technologies").get(
+        "programming_language"
+    ) == technologies.split(",")
 
 
 @when('edito el estado a "{new_state}"')
