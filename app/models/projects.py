@@ -21,10 +21,10 @@ class Projects(CustomBaseModel):
     updated_date: Optional[str] = ""
     team_assigned: Optional[str] = None
     activities_record: Optional[List[ActivitiesRecord]] = []
-    tentative_budget: float
-    budget_currency: Currency
-    tentative_duration: int
-    unit_duration: UnitDuration
+    tentative_budget: Optional[float]
+    budget_currency: Optional[Currency]
+    tentative_duration: Optional[int]
+    unit_duration: Optional[UnitDuration]
 
     @staticmethod
     def get_schema():
