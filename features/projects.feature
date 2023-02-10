@@ -1,10 +1,9 @@
 Feature: CRUD Project
 
-
   Scenario: Create project
     Given que quiero crear un proyecto
 
-    When completo alta de proyecto, con nombre "Find my team", idiomas "ingles, español", descripcion "Plataforma para matcheo de equipos y proyecto" y tenologias "python, react"
+    When completo alta de proyecto, con nombre "Find my team", idiomas "ingles, español", descripcion "Plataforma para matcheo de equipos y proyecto", presupuesto "1000" dolares, con duracion tentativa de 7 dias y tenologias "python, react"
 
     And confirmo la creacion
 
