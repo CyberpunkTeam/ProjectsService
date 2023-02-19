@@ -25,6 +25,7 @@ class Projects(CustomBaseModel):
     budget_currency: Optional[Currency]
     tentative_duration: Optional[int]
     unit_duration: Optional[UnitDuration]
+    project_type: Optional[str]
 
     @staticmethod
     def get_schema():
@@ -44,6 +45,7 @@ class Projects(CustomBaseModel):
             "budget_currency": str,
             "tentative_duration": int,
             "unit_duration": str,
+            "project_type": str,
         }
 
     def complete(self):
