@@ -4,7 +4,7 @@ from app.models.custom_base_model import CustomBaseModel
 
 
 class Description(CustomBaseModel):
-    files_attached: Optional[dict] = []
+    files_attached: Optional[dict] = {}
     functional_requirements: Optional[List[str]] = []
     non_function_requirements: Optional[List[str]] = []
     summary: Optional[str] = ""
