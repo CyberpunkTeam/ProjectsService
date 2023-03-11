@@ -1,6 +1,5 @@
 FROM python:3.9-buster
 
-
 RUN python3 -m pip install --upgrade pip setuptools wheel
 RUN pip install poetry
 COPY poetry.lock pyproject.toml ./
