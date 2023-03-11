@@ -84,7 +84,7 @@ def step_impl(context):
 
 
 @given(
-    'que existe el proyecto con nombre "{name}", idiomas "{idioms}", descripcion "{description}" y tenologias "{technologies}"'
+    'que existe el proyecto con nombre "{name}", idiomas "{idioms}", descripcion "{description}" y tecnologias "{technologies}"'
 )
 def step_impl(context, name, idioms, description, technologies):
     """
@@ -121,7 +121,7 @@ def step_impl(context, name, idioms, description, technologies):
 
 
 @when(
-    'edito el nombre del proyecto a "{name}", idiomas "{idioms}", descripcion "{description}" y tenologias "{'
+    'edito el nombre del proyecto a "{name}", idiomas "{idioms}", descripcion "{description}" y tecnologias "{'
     'technologies}"'
 )
 def step_impl(context, name, idioms, description, technologies):
@@ -158,7 +158,7 @@ def step_impl(context):
 
 
 @step(
-    'veo que tiene nombre "{name}", idiomas "{idioms}", descripcion "{description}" y tenologias "{technologies}"'
+    'veo que tiene nombre "{name}", idiomas "{idioms}", descripcion "{description}" y tecnologias "{technologies}"'
 )
 def step_impl(context, name, idioms, description, technologies):
     """
@@ -236,3 +236,88 @@ def step_impl(context, amount):
     assert context.response.status_code == 200
     projects = context.response.json()
     assert len(projects) == int(amount)
+
+
+@given(
+    'que existe el proyecto con nombre "{name}" y tipo "{project_type}", idiomas "{idioms}", descripcion "{description}", tecnologias "{programming_language}", framework "{frameworks}" y presupuesto de {budget} {currency}'
+)
+def step_impl(
+    context,
+    name,
+    project_type,
+    idioms,
+    description,
+    programming_language,
+    frameworks,
+    budget,
+    currency,
+):
+    """
+    :param currency:
+    :param budget:
+    :param frameworks:
+    :param programming_language:
+    :param description:
+    :param project_type:
+    :param idioms:
+    :type context: behave.runner.Context
+    """
+    context.vars["project_to_save"] = {
+        "name": name,
+        "idioms": idioms.split(","),
+        "description": {"summary": description},
+        "technologies": {
+            "programming_language": programming_language.split(","),
+            "frameworks": frameworks.split(","),
+        },
+        "creator_uid": f"{random.randint(1, 500)}",
+        "tentative_budget": float(budget),
+        "budget_currency": currency,
+        "tentative_duration": int(7),
+        "unit_duration": UnitDuration.DAYS,
+        "project_type": project_type,
+    }
+
+    mimetype = "application/json"
+    headers = {"Content-Type": mimetype, "Accept": mimetype}
+
+    url = "/projects"
+
+    context.response = context.client.post(
+        url, json=context.vars["project_to_save"], headers=headers
+    )
+
+    assert context.response.status_code == 201
+    context.vars["pid"] = context.response.json()["pid"]
+    context.vars[f"{name}_pid"] = context.response.json()["pid"]
+
+
+@when('filtro por proyectos con tecnologia "{programming_languages}"')
+def step_impl(context, programming_languages):
+    """
+    :param programming_languages:
+    :type context: behave.runner.Context
+    """
+    query_params = f"?programming_languages={programming_languages}"
+
+    url = "/projects" + query_params
+
+    context.response = context.client.get(url)
+
+
+@when(
+    'filtro por proyectos con tecnologia "{programming_languages}", presupuesto entre {min_budget} y {max_budget} {currency}.'
+)
+def step_impl(context, programming_languages, min_budget, max_budget, currency):
+    """
+    :param currency:
+    :param max_budget:
+    :param min_budget:
+    :param programming_languages:
+    :type context: behave.runner.Context
+    """
+    query_params = f"?programming_languages={programming_languages}&min_budget={min_budget}&max_budget={max_budget}&currency={currency}"
+
+    url = "/projects" + query_params
+
+    context.response = context.client.get(url)

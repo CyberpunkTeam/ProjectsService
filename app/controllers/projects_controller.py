@@ -25,8 +25,37 @@ class ProjectsController:
         return project
 
     @staticmethod
-    def get(repository, auxiliary_repository, pid=None, creator_uid=None, state=None):
-        result = repository.get(pid=pid, creator_uid=creator_uid, state=state)
+    def get(
+        repository,
+        auxiliary_repository,
+        pid=None,
+        creator_uid=None,
+        state=None,
+        currency=None,
+        min_budget=None,
+        max_budget=None,
+        project_types=None,
+        idioms=None,
+        programming_languages=None,
+        frameworks=None,
+        platforms=None,
+        databases=None,
+    ):
+
+        result = repository.get(
+            pid=pid,
+            creator_uid=creator_uid,
+            state=state,
+            programming_language=programming_languages,
+            frameworks=frameworks,
+            platforms=platforms,
+            databases=databases,
+            budget_currency=currency,
+            min_tentative_budget=min_budget,
+            max_tentative_budget=max_budget,
+            idioms=idioms,
+            projects_types=project_types,
+        )
         if len(result) == 0 and pid is not None:
             raise HTTPException(status_code=404, detail="Project not found")
 

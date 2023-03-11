@@ -5,6 +5,7 @@ from app.models.projects import Projects
 
 class ProjectsRepository(DataBase):
     COLLECTION_NAME = "projects"
+    FILTER_NAMES = {}
 
     def __init__(self, url, db_name):
         if db_name == "test":
@@ -14,7 +15,21 @@ class ProjectsRepository(DataBase):
         else:
             super().__init__(url, db_name)
 
-    def get(self, pid=None, creator_uid=None, state=None):
+    def get(
+        self,
+        pid=None,
+        creator_uid=None,
+        state=None,
+        programming_language=None,
+        frameworks=None,
+        platforms=None,
+        databases=None,
+        budget_currency=None,
+        min_tentative_budget=None,
+        max_tentative_budget=None,
+        idioms=None,
+        projects_types=None,
+    ):
         filters = {}
 
         if pid is not None:
@@ -25,6 +40,37 @@ class ProjectsRepository(DataBase):
 
         if state is not None:
             filters["state"] = state
+
+        if programming_language is not None and len(programming_language) > 0:
+            filters["technologies.programming_language"] = {"$in": programming_language}
+
+        if frameworks is not None and len(frameworks) > 0:
+            filters["technologies.frameworks"] = {"$in": frameworks}
+
+        if platforms is not None and len(platforms) > 0:
+            filters["technologies.platforms"] = {"$in": platforms}
+
+        if databases is not None and len(databases) > 0:
+            filters["technologies.databases"] = {"$in": databases}
+
+        if idioms is not None and len(idioms) > 0:
+            filters["idioms"] = {"$in": idioms}
+
+        if projects_types is not None and len(projects_types) > 0:
+            filters["project_type"] = {"$in": projects_types}
+
+        if budget_currency is not None:
+            filters["budget_currency"] = budget_currency
+
+        if min_tentative_budget is not None and max_tentative_budget is not None:
+            filters["tentative_budget"] = {
+                "$lte": max_tentative_budget,
+                "$gte": min_tentative_budget,
+            }
+        elif min_tentative_budget is not None:
+            filters["tentative_budget"] = {"$gte": min_tentative_budget}
+        elif max_tentative_budget is not None:
+            filters["tentative_budget"] = {"$lte": max_tentative_budget}
 
         return self.filter(self.COLLECTION_NAME, filters, output_model=Projects)
 
