@@ -64,7 +64,7 @@ class ProjectsController:
             activities = ActivitiesRecordController.get(auxiliary_repository, pid)
             project_to_return.activities_record = activities
             return project_to_return
-        return result
+        return result[::-1]
 
     @staticmethod
     def put(repository, auxiliary_repository, pid, project_update):
