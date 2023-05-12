@@ -3,7 +3,6 @@
 [![.github/workflows/pipeline.yml](https://github.com/CyberpunkTeam/UserService/actions/workflows/pipeline.yml/badge.svg)](https://github.com/CyberpunkTeam/UserService/actions/workflows/pipeline.yml)
 [![codecov](https://codecov.io/gh/CyberpunkTeam/ProjectsService/branch/master/graph/badge.svg?token=6PI3X2PZT1)](https://codecov.io/gh/CyberpunkTeam/ProjectsService)
 
-
 ## Setup
 
 1. ```Install python ^3.9```
