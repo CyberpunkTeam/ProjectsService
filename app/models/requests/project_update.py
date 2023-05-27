@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 from app.models.auxiliary_models.currency import Currency
 from app.models.auxiliary_models.description import Description
+from app.models.auxiliary_models.internal_states import InternalStates
 from app.models.auxiliary_models.project_states import ProjectStates
 from app.models.auxiliary_models.technologies import Technologies
 from app.models.auxiliary_models.unit_duration import UnitDuration
@@ -24,6 +25,7 @@ class ProjectsUpdate(BaseModel):
     tentative_duration: Optional[int]
     unit_duration: Optional[UnitDuration]
     project_type: Optional[str]
+    internal_state: Optional[InternalStates]
 
     def to_json(self):
         return loads(self.json(exclude_defaults=True))

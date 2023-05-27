@@ -8,4 +8,3 @@ class ProjectStates(str, Enum):
     WIP = "WIP"
     FINISH_REQUEST = "FINISH_REQUEST"
     ABANDONS_REQUEST = "ABANDONS_REQUEST"
-    BLOCKED = "BLOCKED"

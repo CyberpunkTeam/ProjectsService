@@ -5,6 +5,7 @@ from behave import *
 from app.models.auxiliary_models.actions import Actions
 from app.models.auxiliary_models.activities_record import ActivitiesRecord
 from app.models.auxiliary_models.currency import Currency
+from app.models.auxiliary_models.internal_states import InternalStates
 from app.models.auxiliary_models.project_states import ProjectStates
 from app.models.auxiliary_models.unit_duration import UnitDuration
 
@@ -76,6 +77,7 @@ def step_impl(context):
     assert context.response.status_code == 201
     body = context.response.json()
     assert body.get("state") == ProjectStates.PENDING
+    assert body.get("internal_state") == InternalStates.ACTIVE
     assert len(body.get("activities_record")) == 1
     activity = body.get("activities_record")[0]
     activity_expected = ActivitiesRecord(action=Actions.CREATED, pid="fake")
@@ -321,3 +323,29 @@ def step_impl(context, programming_languages, min_budget, max_budget, currency):
     url = "/projects" + query_params
 
     context.response = context.client.get(url)
+
+
+@step('edito el estado interno a "{state}"')
+def step_impl(context, state):
+    """
+    :type context: behave.runner.Context
+    """
+    state = "BLOCKED" if state == "bloqueado" else "ACTIVE"
+    body_to_update = {"internal_state": state}
+    context.vars["body_to_update"] = body_to_update
+    mimetype = "application/json"
+    headers = {"Content-Type": mimetype, "Accept": mimetype}
+
+    url = f"/projects/{context.vars['pid']}"
+
+    context.response = context.client.put(url, json=body_to_update, headers=headers)
+
+
+@step('veo que tiene el estado interno "{state}"')
+def step_impl(context, state):
+    """
+    :type context: behave.runner.Context
+    """
+    state = "BLOCKED" if state == "bloqueado" else "ACTIVE"
+    project_updated = context.response.json()
+    assert project_updated.get("internal_state") == state
