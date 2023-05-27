@@ -42,6 +42,7 @@ async def list_projects(
     frameworks: str = None,
     platforms: str = None,
     databases: str = None,
+    internal_state: str = None,
 ):
     return ProjectsController.get(
         projects_repository,
@@ -61,6 +62,7 @@ async def list_projects(
         frameworks=frameworks.split(",") if frameworks is not None else frameworks,
         platforms=platforms.split(",") if platforms is not None else platforms,
         databases=databases.split(",") if databases is not None else databases,
+        internal_state=internal_state,
     )
 
 

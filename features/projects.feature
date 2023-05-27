@@ -31,6 +31,30 @@ Feature: CRUD Project
     And veo que tiene el estado "cancelado"
 
 
+  Scenario: Update project internal state to blocked
+
+    Given que existe el proyecto con nombre "Find my team", idiomas "ingles, español", descripcion "Plataforma para matcheo de equipos y proyecto" y tecnologias "python, react"
+
+    When edito el estado interno a "bloqueado"
+
+    Then se me informa que se actualizo correctamente
+
+    And veo que tiene el estado interno "bloqueado"
+
+
+  Scenario: Update project internal state to active
+
+    Given que existe el proyecto con nombre "Find my team", idiomas "ingles, español", descripcion "Plataforma para matcheo de equipos y proyecto" y tecnologias "python, react"
+
+    And edito el estado interno a "bloqueado"
+
+    When edito el estado interno a "activo"
+
+    Then se me informa que se actualizo correctamente
+
+    And veo que tiene el estado interno "activo"
+
+
   Scenario: Update project state to finished
 
     Given que existe el proyecto con nombre "Find my team", idiomas "ingles, español", descripcion "Plataforma para matcheo de equipos y proyecto" y tecnologias "python, react"
