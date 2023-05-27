@@ -40,6 +40,7 @@ class ProjectsController:
         frameworks=None,
         platforms=None,
         databases=None,
+        internal_state=None,
     ):
 
         result = repository.get(
@@ -55,6 +56,7 @@ class ProjectsController:
             max_tentative_budget=max_budget,
             idioms=idioms,
             projects_types=project_types,
+            internal_state=internal_state,
         )
         if len(result) == 0 and pid is not None:
             raise HTTPException(status_code=404, detail="Project not found")
