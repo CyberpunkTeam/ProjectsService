@@ -29,6 +29,7 @@ class ProjectsRepository(DataBase):
         max_tentative_budget=None,
         idioms=None,
         projects_types=None,
+        internal_state=None,
     ):
         filters = {}
 
@@ -71,6 +72,9 @@ class ProjectsRepository(DataBase):
             filters["tentative_budget"] = {"$gte": min_tentative_budget}
         elif max_tentative_budget is not None:
             filters["tentative_budget"] = {"$lte": max_tentative_budget}
+
+        if internal_state is not None:
+            filters["internal_state"] = internal_state
 
         return self.filter(self.COLLECTION_NAME, filters, output_model=Projects)
 
