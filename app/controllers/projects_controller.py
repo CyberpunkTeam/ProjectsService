@@ -100,3 +100,15 @@ class ProjectsController:
             raise HTTPException(status_code=500, detail="Error to update")
 
         return ProjectsController.get(repository, auxiliary_repository, pid=pid)
+
+    @staticmethod
+    def get_metrics(repository):
+        projects = repository.get()
+        metrics = {}
+        for project in projects:
+            project_created_date = project.created_date[:10]
+            metrics[project_created_date] = metrics.get(project_created_date, 0) + 1
+
+        payload = {"projects_created": metrics}
+
+        return payload

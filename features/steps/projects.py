@@ -349,3 +349,24 @@ def step_impl(context, state):
     state = "BLOCKED" if state == "bloqueado" else "ACTIVE"
     project_updated = context.response.json()
     assert project_updated.get("internal_state") == state
+
+
+@when("pido las metricas de proyectos")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    url = "/metrics"
+
+    context.response = context.client.get(url)
+
+    assert context.response.status_code == 200
+
+
+@then("me retorna que se creo un projecto")
+def step_impl(context):
+    """
+    :type context: behave.runner.Context
+    """
+    body = context.response.json()
+    assert len(body.get("projects_created")) == 1
