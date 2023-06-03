@@ -76,3 +76,8 @@ async def update_project(pid: str, project_update: ProjectsUpdate):
     return ProjectsController.put(
         projects_repository, auxiliary_repository, pid, project_update
     )
+
+
+@router.get("/metrics", tags=["projects"])
+async def get_metrics():
+    return ProjectsController.get_metrics(projects_repository)

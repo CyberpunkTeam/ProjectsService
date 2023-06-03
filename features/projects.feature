@@ -108,3 +108,12 @@ Feature: CRUD Project
     When filtro por proyectos con tecnologia "javascript", presupuesto entre 500 y 1000 DOLAR.
 
     Then me retorna 1 proyectos
+
+
+ Scenario: get metrics of projects
+
+    Given que existe el proyecto con nombre "Find my team" y tipo "Web", idiomas "ingles, español", descripcion "Plataforma para matcheo de equipos y proyecto", tecnologias "javascript", framework "React" y presupuesto de 800 DOLAR
+
+    When pido las metricas de proyectos
+
+    Then me retorna que se creo un projecto
