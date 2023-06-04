@@ -107,6 +107,7 @@ class ProjectsController:
         created_date_metrics = {}
         state_metrics = {}
         types_metrics = {}
+        internal_state_metrics = {}
         for project in projects:
             project_created_date = project.created_date[:10]
             created_date_metrics[project_created_date] = (
@@ -115,6 +116,9 @@ class ProjectsController:
             state_metrics[project.state] = state_metrics.get(project.state, 0) + 1
             types_metrics[project.project_type] = (
                 types_metrics.get(project.project_type, 0) + 1
+            )
+            internal_state_metrics[project.internal_state] = (
+                internal_state_metrics.get(project.internal_state, 0) + 1
             )
 
         payload = {
@@ -127,8 +131,12 @@ class ProjectsController:
                 "values": list(state_metrics.values()),
             },
             "projects_type": {
-                "labels": list(types_metrics),
+                "labels": list(types_metrics.keys()),
                 "values": list(types_metrics.values()),
+            },
+            "projects_internal_state": {
+                "labels": list(internal_state_metrics.keys()),
+                "values": list(internal_state_metrics.values()),
             },
         }
 

@@ -372,5 +372,6 @@ def step_impl(context):
     assert "projects_created" in body
     assert "projects_state" in body
     assert "projects_type" in body
+    assert "projects_internal_state" in body
 
     assert len(body["projects_created"]["labels"]) == 1
