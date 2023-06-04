@@ -114,9 +114,12 @@ class ProjectsController:
                 created_date_metrics.get(project_created_date, 0) + 1
             )
             state_metrics[project.state] = state_metrics.get(project.state, 0) + 1
-            types_metrics[project.project_type] = (
-                types_metrics.get(project.project_type, 0) + 1
-            )
+
+            if project.project_type is not None and project.project_type != "":
+                types_metrics[project.project_type] = (
+                    types_metrics.get(project.project_type, 0) + 1
+                )
+
             internal_state_metrics[project.internal_state] = (
                 internal_state_metrics.get(project.internal_state, 0) + 1
             )
