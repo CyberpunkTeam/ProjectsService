@@ -104,11 +104,40 @@ class ProjectsController:
     @staticmethod
     def get_metrics(repository):
         projects = repository.get()
-        metrics = {}
+        created_date_metrics = {}
+        state_metrics = {}
+        types_metrics = {}
+        internal_state_metrics = {}
         for project in projects:
             project_created_date = project.created_date[:10]
-            metrics[project_created_date] = metrics.get(project_created_date, 0) + 1
+            created_date_metrics[project_created_date] = (
+                created_date_metrics.get(project_created_date, 0) + 1
+            )
+            state_metrics[project.state] = state_metrics.get(project.state, 0) + 1
+            types_metrics[project.project_type] = (
+                types_metrics.get(project.project_type, 0) + 1
+            )
+            internal_state_metrics[project.internal_state] = (
+                internal_state_metrics.get(project.internal_state, 0) + 1
+            )
 
-        payload = {"projects_created": metrics}
+        payload = {
+            "projects_created": {
+                "labels": list(created_date_metrics.keys()),
+                "values": list(created_date_metrics.values()),
+            },
+            "projects_state": {
+                "labels": list(state_metrics.keys()),
+                "values": list(state_metrics.values()),
+            },
+            "projects_type": {
+                "labels": list(types_metrics.keys()),
+                "values": list(types_metrics.values()),
+            },
+            "projects_internal_state": {
+                "labels": list(internal_state_metrics.keys()),
+                "values": list(internal_state_metrics.values()),
+            },
+        }
 
         return payload
